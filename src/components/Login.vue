@@ -7,7 +7,7 @@
             </div>
             <!-- 登入表單區塊 -->
             <!-- 帳號 -->
-            <el-form :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
+            <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
                 <el-form-item prop="username">
                     <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
                 </el-form-item>
@@ -17,8 +17,8 @@
                 </el-form-item>
             <!-- 按鈕 -->
                 <el-form-item class="btns">
-                    <el-button type="primary">登入</el-button>
-                    <el-button type="info">重置</el-button>
+                    <el-button type="primary" @click="login">登入</el-button>
+                    <el-button type="info" @click="resetLoginForm">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -28,12 +28,12 @@
 <script>
 
 export default {
-  data () {
+  data() {
     return {
       // 登入表單的數據綁定物件
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       // 表單驗證規則物件
       loginFormRules: {
@@ -48,6 +48,26 @@ export default {
           { min: 6, max: 15, message: '長度在6到15個字符之間', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    // 點擊重製按鈕
+    resetLoginForm() {
+      this.$refs.loginFormRef.resetFields()
+    },
+    login() {
+      this.$refs.loginFormRef.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (res.meta.status !== 200) return this.$msg.error('登入失敗')
+        this.$msg.success('登入成功')
+        // 將登入成功之後的token保存到客戶端的sessionStorage中
+        // 1-1 項目中除了登入之外的其他API接口,必須在登入之後才能訪問
+        // 1-2 token指應在當前網站打開期間生效 所以將token保存在sessionStorage中
+        window.sessionStorage.setItem('token', res.data.token)
+        // 通過編成是導航跳轉到後台主頁 路由地址是/home
+        this.$router.push('/home')
+      })
     }
   }
 }
