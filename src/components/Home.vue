@@ -11,18 +11,22 @@
       <!-- 頁面主要區域 -->
       <el-container>
         <!-- 左側欄位 -->
-        <el-aside width="200px">
+        <el-aside :width="isCollapse ? '64px' : '200px'">
+          <div class="toggle-button" @click="toggleCollapse">|||</div>
           <!-- 左側導航 -->
           <el-menu
             background-color="#80976C"
             text-color="#fff"
-            active-text-color="#ffd04b">
+            active-text-color="#FDE838"
+            unique-opened
+            :collapse='isCollapse'
+            :collapse-transition="false">
           <!-- 一級菜單 -->
           <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
             <!-- 一級菜單區塊 -->
           <template slot="title">
             <!-- 圖標 -->
-            <i class="el-icon-location"></i>
+            <i :class="iconsObj[item.id]"></i>
             <!-- 文本 -->
             <span>{{item.authName}}</span>
           </template>
@@ -30,7 +34,7 @@
             <el-menu-item :index="subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
                 <!-- 圖標 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-menu"></i>
                 <!-- 文本 -->
                 <span>{{ subItem.authName }}</span>
               </template>
@@ -48,7 +52,16 @@
 export default {
   data() {
     return {
-      menulist: []
+      menulist: [],
+      iconsObj: {
+        125: 'icon-users',
+        103: 'icon-user-tie',
+        101: 'el-icon-s-goods',
+        102: 'el-icon-s-order',
+        145: 'el-icon-s-marketing'
+      },
+      // 是否收展
+      isCollapse: false
     }
   },
   created() {
@@ -65,6 +78,10 @@ export default {
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.menulist = res.data
       console.log(res)
+    },
+    // 點擊按鈕收展菜單
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse
     }
   }
 }
@@ -97,6 +114,9 @@ export default {
 }
 .el-aside {
   background-color: #80976C;
+  .el-menu {
+  border-right: 0;
+}
 }
 .el-main {
  background-color: #E9EDF0;
@@ -104,6 +124,22 @@ export default {
 .el-submenu i,
 .el-menu-item i {
   color: #fff;
+}
+
+.icon-users,
+.icon-user-tie {
+  font-size: 12pt;
+  margin-left: 3px;
+  margin-right: 10px;
+}
+.toggle-button {
+  background-color: #AAB99D;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  line-height: 24px;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 
 </style>

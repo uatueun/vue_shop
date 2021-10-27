@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import './common/stylus/style.css'
 import './plugins/element.js'
 // 載入全局樣式表
 import './assets/css/global.css'
