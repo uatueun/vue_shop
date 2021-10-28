@@ -20,7 +20,9 @@
             active-text-color="#FDE838"
             unique-opened
             :collapse='isCollapse'
-            :collapse-transition="false">
+            :collapse-transition="false"
+            router
+            :default-active="activePath">
           <!-- 一級菜單 -->
           <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
             <!-- 一級菜單區塊 -->
@@ -31,7 +33,7 @@
             <span>{{item.authName}}</span>
           </template>
               <!-- 二級菜單 -->
-            <el-menu-item :index="subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id"  @click="saveNavState('/' + subItem.path)">
               <template slot="title">
                 <!-- 圖標 -->
                 <i class="el-icon-menu"></i>
@@ -43,7 +45,10 @@
           </el-menu>
         </el-aside>
         <!-- 右側主要欄位 -->
-        <el-main>Main</el-main>
+        <el-main>
+          <!-- 路由佔位符 -->
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
 </template>
@@ -61,11 +66,14 @@ export default {
         145: 'el-icon-s-marketing'
       },
       // 是否收展
-      isCollapse: false
+      isCollapse: false,
+      // 被點擊的連結地址
+      activePath: ''
     }
   },
   created() {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
@@ -82,6 +90,10 @@ export default {
     // 點擊按鈕收展菜單
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
+    },
+    // 保存連結的選取狀態
+    saveNavState(activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
     }
   }
 }
@@ -119,7 +131,7 @@ export default {
 }
 }
 .el-main {
- background-color: #E9EDF0;
+  background-color: #E9EDF0;
 }
 .el-submenu i,
 .el-menu-item i {

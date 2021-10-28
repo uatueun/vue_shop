@@ -17,7 +17,12 @@ import {
     Menu,
     Submenu,
     MenuItemGroup,
-    MenuItem
+    MenuItem,
+    Breadcrumb,
+    BreadcrumbItem,
+    Card,
+    Row,
+    Col
 } from 'element-ui'
 
 locale.use(lang)
@@ -34,4 +39,9 @@ Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItemGroup)
 Vue.use(MenuItem)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Card)
+Vue.use(Row)
+Vue.use(Col)
 Vue.prototype.$msg = Message
