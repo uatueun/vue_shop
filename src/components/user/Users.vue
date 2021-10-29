@@ -10,9 +10,9 @@
         <!-- 卡片區 -->
         <el-card class="box-card">
             <div>
+              <!-- 搜索和添加 -->
                 <el-row :gutter="20">
                     <el-col :span="9">
-                        <!-- 搜索和添加 -->
                             <el-input placeholder="請輸入內容">
                                 <el-button slot="append" icon="el-icon-search"></el-button>
                             </el-input>
@@ -21,6 +21,21 @@
                         <el-button type="primary">添加用戶</el-button>
                     </el-col>
                 </el-row>
+                <!-- 用戶列表區 -->
+                <el-table :data="userList" border stripe>
+                  <el-table-column type="index"></el-table-column>
+                  <el-table-column label="姓名" prop="username"></el-table-column>
+                  <el-table-column label="信箱" prop="email"></el-table-column>
+                  <el-table-column label="電話" prop="mobile"></el-table-column>
+                  <el-table-column label="角色" prop="role_name"></el-table-column>
+                  <el-table-column label="狀態">
+                    <template slot-scope="scope">
+                      <el-switch v-model="scope.row.mg_state">
+                      </el-switch>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作"></el-table-column>
+                </el-table>
             </div>
         </el-card>
     </div>

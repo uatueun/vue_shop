@@ -22,7 +22,10 @@ import {
     BreadcrumbItem,
     Card,
     Row,
-    Col
+    Col,
+    Table,
+    TableColumn,
+    Switch
 } from 'element-ui'
 
 locale.use(lang)
@@ -44,4 +47,7 @@ Vue.use(BreadcrumbItem)
 Vue.use(Card)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Switch)
 Vue.prototype.$msg = Message
