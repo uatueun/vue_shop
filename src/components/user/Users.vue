@@ -13,12 +13,12 @@
               <!-- 搜索和添加 -->
                 <el-row :gutter="20">
                     <el-col :span="9">
-                            <el-input placeholder="請輸入內容">
-                                <el-button slot="append" icon="el-icon-search"></el-button>
+                            <el-input placeholder="請輸入內容" v-model="queryInfo.query" clearable @clear="getUserList">
+                                <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
                             </el-input>
                     </el-col>
                     <el-col :span="3">
-                        <el-button type="primary">添加用戶</el-button>
+                        <el-button type="primary" @click="addDialogVisible = true">添加用戶</el-button>
                     </el-col>
                 </el-row>
 
@@ -62,6 +62,34 @@
 
             </div>
         </el-card>
+
+          <!-- 添加用戶的彈出對話框 -->
+          <el-dialog
+            title="添加用戶"
+            :visible.sync="addDialogVisible"
+            width="50%">
+            <!-- 內容主體區 -->
+            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="80px">
+              <el-form-item label="用戶名稱" prop="username">
+              <el-input v-model="addForm.username" ></el-input>
+              </el-form-item>
+              <el-form-item label="用戶密碼" prop="password">
+              <el-input v-model="addForm.password" ></el-input>
+              </el-form-item>
+              <el-form-item label="用戶信箱" prop="email">
+              <el-input v-model="addForm.email" ></el-input>
+              </el-form-item>
+              <el-form-item label="手機號碼" prop="mobile">
+              <el-input v-model="addForm.mobile" ></el-input>
+              </el-form-item>
+            </el-form>
+            <!-- 底部區 -->
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="addDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="addDialogVisible = false">確 定</el-button>
+            </span>
+          </el-dialog>
+
     </div>
 </template>
 
@@ -78,7 +106,33 @@ export default {
         pagesize: 2
       },
       userList: [],
-      total: 0
+      total: 0,
+      // 控制添加用戶對話框的顯示跟隱藏
+      addDialogVisible: false,
+      // 添加用戶表單
+      addForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      // 定義表單驗證規則
+      addFormRules: {
+        username: [
+          { required: true, message: '請輸入用戶名稱', trigger: 'blur' },
+          { min: 3, max: 10, message: '用戶名稱長度為3~10個字元', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '請輸入用戶密碼', trigger: 'blur' },
+          { min: 6, max: 14, message: '用戶名稱長度為6~14個字元', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '請輸入用戶信箱', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '請輸入用戶手機', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
